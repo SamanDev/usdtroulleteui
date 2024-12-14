@@ -477,7 +477,7 @@ const BlackjackGame = (prop) => {
                             setLast(false);
                         }}
                     >
-                        Show Last Hand
+                        Show Last Hand 
                     </div>
                 )}
 
