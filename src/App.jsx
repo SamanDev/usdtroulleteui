@@ -28,7 +28,7 @@ _renge.push(_renge[1] * 5);
 _renge.push(_renge[1] * 10);
 _renge.push(_renge[1] * 20);
 //const WEB_URL = process.env.REACT_APP_MODE === "production" ? `wss://${process.env.REACT_APP_DOMAIN_NAME}/` : `ws://${loc.hostname}:8088`;
-const WEB_URL = `wss://mroullete.usdtpoker.club/`;
+const WEB_URL = `wss://mroullete.royale777.vip/`;
 //const WEB_URL = `ws://${loc.hostname}:8092/`;
 // (A) LOCK SCREEN ORIENTATION
 
