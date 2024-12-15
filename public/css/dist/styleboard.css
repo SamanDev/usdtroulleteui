@@ -72,7 +72,7 @@ cursor: not-allowed;
     transform: scale(0.7) translateX(-30px);
 }
 .chip::after {
-    content: "25K";
+    content: "1";
     position: absolute;
     font-weight: 700;
     font-family: "Oswald", sans-serif;
@@ -82,18 +82,18 @@ cursor: not-allowed;
     color: #fff !important;
 }
 .chip[style*="Purple"]::after {
-    content: "50K";
+    content: "5";
 }
 
 .chip[style*="Orange"]::after {
-    content: "100K";
+    content: "25";
 }
 .chip[style*="Red"]::after {
-    content: "250K";
+    content: "50";
 }
 .chip[style*="Blue"]::after {
-    content: "500K";
+    content: "100";
 }
 .chip[style*="Black"]::after {
-    content: "1M";
+    content: "250";
 }
