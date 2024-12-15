@@ -83,7 +83,9 @@ const getChipIcon = (value) => {
     return chipsarr[_idc];
 };
 const doCurrencyMil = (value, fix) => {
-    let val;
+    var val = value?.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    return val;
+    
     if (value < 1000000) {
         val = doCurrency(parseFloat(value / 1000).toFixed(fix || fix == 0 ? fix : 0)) + "K";
     } else {
