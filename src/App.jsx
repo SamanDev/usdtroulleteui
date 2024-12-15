@@ -20,13 +20,14 @@ if (pathArr.length == 3) {
 
 //_auth = "farshad-HangOver2";
 //console.log(_auth);
-let _renge = [.5];
-_renge.push(_renge[0] * 2);
+let _renge = [1];
+_renge.push(_renge[0] * 5);
 
-_renge.push(_renge[1] * 2);
-_renge.push(_renge[1] * 5);
-_renge.push(_renge[1] * 10);
-_renge.push(_renge[1] * 20);
+_renge.push(_renge[0] * 25);
+_renge.push(_renge[0] * 50);
+_renge.push(_renge[0] * 100);
+
+_renge.push(_renge[0] * 250);
 //const WEB_URL = process.env.REACT_APP_MODE === "production" ? `wss://${process.env.REACT_APP_DOMAIN_NAME}/` : `ws://${loc.hostname}:8088`;
 const WEB_URL = `wss://mroullete.royale777.vip/`;
 //const WEB_URL = `ws://${loc.hostname}:8092/`;
