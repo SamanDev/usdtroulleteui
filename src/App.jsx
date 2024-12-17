@@ -189,7 +189,7 @@ const AppOrtion = () => {
 };
 
 let supportsOrientationChange = "onorientationchange" in window,
-    orientationEvent = supportsOrientationChange ? supportsOrientationChange : "resize";
+    orientationEvent = supportsOrientationChange ? "onorientationchange" : "resize";
 var sizeBln;
 window.addEventListener(
     orientationEvent,
@@ -681,7 +681,7 @@ const TableContect = (prop) => {
     useEffect(() => {
         setTimeout(() => {
             UserWebsocket.connect(WEB_URL, _auth);
-        }, 500);
+        }, 1000);
         
         eventBus.on("tables", (data) => {
             setGamesData(data.games[0]);
