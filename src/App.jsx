@@ -15,7 +15,7 @@ const loc = new URL(window.location);
 const pathArr = loc.pathname.toString().split("/");
 
 if (pathArr.length == 3) {
-    _auth = pathArr[1] + "___"+pathArr[2];
+    _auth = pathArr[1] + "___" + pathArr[2];
 }
 
 //_auth = "farshad-HangOver2";
@@ -86,7 +86,7 @@ const getChipIcon = (value) => {
 const doCurrencyMil = (value, fix) => {
     var val = value?.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     return val;
-    
+
     if (value < 1000000) {
         val = doCurrency(parseFloat(value / 1000).toFixed(fix || fix == 0 ? fix : 0)) + "K";
     } else {
@@ -221,22 +221,21 @@ let timerRunningOut = new Howl({
 
 const Main = () => {
     const [chip, setChip] = useState(50);
-    
 
     return (
         <div>
             <div className={"game-room"} id="scale">
-                <BlackjackGame setChip={setChip} chip={chip}/>
+                <BlackjackGame setChip={setChip} chip={chip} />
                 <WheelContect />
 
-                <TableContect  chip={chip}/>
+                <TableContect chip={chip} />
             </div>
         </div>
     );
 };
 const BlackjackGame = (prop) => {
     const [gamesData, setGamesData] = useState([]);
-   
+
     const [lasts, setLasts] = useState([]);
     const [gameData, setGameData] = useState({ status: "" }); // Baraye zakhire JSON object
     const [last, setLast] = useState(false);
@@ -322,9 +321,9 @@ const BlackjackGame = (prop) => {
         }
         if (gameData?.status == "Spin") {
             //setLast(false);
-            $('.lastwheel').addClass("Spin")
+            $(".lastwheel").addClass("Spin");
         } else {
-            $('.lastwheel').removeClass("Spin")
+            $(".lastwheel").removeClass("Spin");
             $("[data-bet]").removeClass("noclick-nohide");
         }
 
@@ -351,7 +350,7 @@ const BlackjackGame = (prop) => {
                 }
             );
 
-        AppOrtion();
+        //AppOrtion();
     }, [gameData?.status]);
     useEffect(() => {
         if (last && gameDataLive?.status == "Done") {
@@ -372,67 +371,70 @@ const BlackjackGame = (prop) => {
 
     useEffect(() => {
         if (gameData?.players) {
-            if (gameData?.status == "End") {
-                setListBets(gameData?.players.sort((a, b) => (a.win > b.win ? -1 : 1)));
-            } else {
-                setListBets(gameData?.players.sort((a, b) => (a.amount > b.amount ? -1 : 1)));
-            }
-            if ($(".roulette-table-container")) {
-            gameData.players.map(function (x, i) {
-                if (x.nickname != userData?.nickname) {
-                    let modecls = "org";
-                    if (last) {
-                        modecls = "lst";
-                    }
-                    if ($("[data-bet=" + x.betId.id + "]").length > 0) {
-                        let blnIs = $("[data-bet=" + x.betId.id + "]").find('[username="' + x.nickname + '"]').length;
-                        if (blnIs == 0) {
-                            let cIcon = getChipIcon(x.amount);
-                            let cCount = $("[data-bet=" + x.betId.id + "]").find(".user").length + i;
-                            if (x.betId.payload.length == 1) {
-                                $("[data-bet=" + x.betId.id + "] > div.value").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 30) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
-                            } else {
-                                $("[data-bet=" + x.betId.id + "] > div").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 30) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
-                            }
-                        }
-                    } else {
-                        let blnIs = $("[data-highlight=" + x.betId.id + "]").find('[username="' + x.nickname + '"]').length;
-                        if (blnIs == 0) {
-                            let cIcon = getChipIcon(x.amount);
-                            let cCount = $("[data-highlight=" + x.betId.id + "]").find(".user").length + i;
-
-                            $("[data-highlight=" + x.betId.id + "]").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 10) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
-                        }
-                    }
+            
+            
+            if ($(".roulette-table-container:visible").length > 0) {
+                if (gameData?.status == "End") {
+                    setListBets(gameData?.players.sort((a, b) => (a.win > b.win ? -1 : 1)));
                 } else {
-                    $(".roulette-table-container").removeClass("noclick-nohide");
-                    let modecls = "org";
-                    if (last) {
-                        modecls = "lst";
-                    }
-                    if ($("[data-bet=" + x.betId.id + "]").length > 0) {
-                        let blnIs = $("[data-bet=" + x.betId.id + "]").find('[username="' + x.nickname + '"]').length;
-                        if (blnIs == 0) {
-                            let cIcon = getChipIcon(x.amount);
-                            let cCount = $("[data-bet=" + x.betId.id + "]").find(".user").length + i;
-                            if (x.betId.payload.length == 1) {
-                                $("[data-bet=" + x.betId.id + "] > div.value").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
-                            } else {
-                                $("[data-bet=" + x.betId.id + "] > div").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                    setListBets(gameData?.players.sort((a, b) => (a.amount > b.amount ? -1 : 1)));
+                }
+
+                gameData.players.map(function (x, i) {
+                    if (x.nickname != userData?.nickname) {
+                        let modecls = "org";
+                        if (last) {
+                            modecls = "lst";
+                        }
+                        if ($("[data-bet=" + x.betId.id + "]").length > 0) {
+                            let blnIs = $("[data-bet=" + x.betId.id + "]").find('[username="' + x.nickname + '"]').length;
+                            if (blnIs == 0) {
+                                let cIcon = getChipIcon(x.amount);
+                                let cCount = $("[data-bet=" + x.betId.id + "]").find(".user").length + i;
+                                if (x.betId.payload.length == 1) {
+                                    $("[data-bet=" + x.betId.id + "] > div.value").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 30) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                } else {
+                                    $("[data-bet=" + x.betId.id + "] > div").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 30) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                }
+                            }
+                        } else {
+                            let blnIs = $("[data-highlight=" + x.betId.id + "]").find('[username="' + x.nickname + '"]').length;
+                            if (blnIs == 0) {
+                                let cIcon = getChipIcon(x.amount);
+                                let cCount = $("[data-highlight=" + x.betId.id + "]").find(".user").length + i;
+
+                                $("[data-highlight=" + x.betId.id + "]").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 10) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
                             }
                         }
                     } else {
-                        let blnIs = $("[data-highlight=" + x.betId.id + "]").find('[username="' + x.nickname + '"]').length;
-                        if (blnIs == 0) {
-                            let cIcon = getChipIcon(x.amount);
-                            let cCount = $("[data-highlight=" + x.betId.id + "]").find(".user").length + i;
+                        $(".roulette-table-container").removeClass("noclick-nohide");
+                        let modecls = "org";
+                        if (last) {
+                            modecls = "lst";
+                        }
+                        if ($("[data-bet=" + x.betId.id + "]").length > 0) {
+                            let blnIs = $("[data-bet=" + x.betId.id + "]").find('[username="' + x.nickname + '"]').length;
+                            if (blnIs == 0) {
+                                let cIcon = getChipIcon(x.amount);
+                                let cCount = $("[data-bet=" + x.betId.id + "]").find(".user").length + i;
+                                if (x.betId.payload.length == 1) {
+                                    $("[data-bet=" + x.betId.id + "] > div.value").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                } else {
+                                    $("[data-bet=" + x.betId.id + "] > div").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                }
+                            }
+                        } else {
+                            let blnIs = $("[data-highlight=" + x.betId.id + "]").find('[username="' + x.nickname + '"]').length;
+                            if (blnIs == 0) {
+                                let cIcon = getChipIcon(x.amount);
+                                let cCount = $("[data-highlight=" + x.betId.id + "]").find(".user").length + i;
 
-                            $("[data-highlight=" + x.betId.id + "]").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                $("[data-highlight=" + x.betId.id + "]").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                            }
                         }
                     }
-                }
-            });
-        }
+                });
+            }
         }
     }, [gameData]);
 
@@ -483,33 +485,33 @@ const BlackjackGame = (prop) => {
                             setLast(false);
                         }}
                     >
-                        Show Last Hand 
+                        Show Last Hand
                     </div>
                 )}
 
                 <div id="bets-container" className={(gameTimer < 2 && gameTimer > -1) || gameData.gameOn == true ? "nochip" : ""}>
                     {_renge.map(function (bet, i) {
-                        if (bet  <= userData.balance) {
+                        if (bet <= userData.balance) {
                             return (
                                 <span key={i} className={prop.chip == bet ? "curchip" : ""}>
                                     <button
                                         className="betButtons  animate__faster animate__animated animate__zoomInUp"
                                         style={{ animationDelay: i * 100 + "ms" }}
                                         id={"chip" + i}
-                                        value={bet }
+                                        value={bet}
                                         onClick={() => {
                                             prop.setChip(bet);
                                         }}
                                     >
-                                        {doCurrencyMil(bet )}
+                                        {doCurrencyMil(bet)}
                                     </button>
                                 </span>
                             );
                         } else {
                             return (
                                 <span key={i} className={prop.chip == bet ? "curchip" : ""}>
-                                    <button className="betButtons noclick noclick-nohide animate__animated animate__zoomInUp" style={{ animationDelay: i * 100 + "ms" }} id={"chip" + i} value={bet }>
-                                        {doCurrencyMil(bet )}
+                                    <button className="betButtons noclick noclick-nohide animate__animated animate__zoomInUp" style={{ animationDelay: i * 100 + "ms" }} id={"chip" + i} value={bet}>
+                                        {doCurrencyMil(bet)}
                                     </button>
                                 </span>
                             );
@@ -577,42 +579,36 @@ const BlackjackGame = (prop) => {
 };
 
 const WheelContect = () => {
-   
-    const [gamesData, setGamesData] = useState([]);
+    const [gamesData, setGamesData] = useState({"id":"Roulette01","status":"Done","players":[],"number":29,"total":0,"net":0,"gameOn":true,"gameStart":true,"currentPlayer":10,"min":1,"startTimer":13});
     const [startNum, setStartNum] = useState(-1);
 
     useEffect(() => {
-        
         eventBus.on("tables", (data) => {
-            if (data.games[0].status == "Spin" || data.games[0].status == "End") {
-                
+            if (data.games[0].status == "Spin") {
                 //if (!gamesData?.status) {
+                setTimeout(() => {
                     setGamesData(data.games[0]);
-               // }
+                }, 100);
+                
+                // }
             } else {
                 setGamesData(data.games[0]);
-                
             }
         });
-        
+
         eventBus.on("lasts", (data) => {
-         
-                setStartNum(data.total[0]);
-                
-            
+            setStartNum(data.total[0]);
         });
         eventBus.on("close", () => {
-            setGamesData([]);
+            //setGamesData([]);
         });
-
     }, []);
 
-    if (startNum == -1 || !gamesData?.status ) {
-        
+    if (startNum == -1 || !gamesData?.status) {
         return <Loaderr />;
     }
     //console.log(mustSpin, prizeNumber, startNum, gameTimer);
-    console.log(startNum);
+   
     return (
         <>
             <div className={"lastwheel"}>
@@ -645,12 +641,12 @@ const WheelContect = () => {
                     fontSize={15}
                     startingOptionIndex={startNum}
                     spinDuration={parseFloat(gamesData.startTimer / 19).toFixed(2)}
-                    mustStartSpinning={gamesData.status=="Spin"?true:false}
+                    mustStartSpinning={gamesData.status == "Spin" ? true : false}
                     prizeNumber={gamesData.number}
                     pointerProps={{ src: "/imgs/avatars/baby.svg" }}
                     onStopSpinning={() => {
                         //setStartNum(prizeNumber);
-                         //setMustSpin(false);
+                        //setMustSpin(false);
                         // setMustSpinFF(true);
                     }}
                 />
@@ -667,8 +663,8 @@ const TableContect = (prop) => {
     useEffect(() => {
         setTimeout(() => {
             UserWebsocket.connect(WEB_URL, _auth);
-        }, 1000);
-        
+        }, 100);
+
         eventBus.on("tables", (data) => {
             setGamesData(data.games[0]);
             if (gameTimer == -1) {
@@ -689,9 +685,8 @@ const TableContect = (prop) => {
             }
         });
         eventBus.on("close", () => {
-            setGamesData([]);
+            //setGamesData([]);
         });
-
     }, []);
 
     if (!gamesData?.status || !userData?.nickname) {
@@ -699,12 +694,12 @@ const TableContect = (prop) => {
     }
     const handleBets = (data) => {
         if (!gamesData.gameOn && gameTimer >= 0 && checkBets(data, userData.nickname)) {
-           // $("[data-bet=" + data.bet + "]").addClass("noclick-nohide");
+            // $("[data-bet=" + data.bet + "]").addClass("noclick-nohide");
 
             $(".roulette-table-container").addClass("noclick-nohide");
-            
+
             //console.log(JSON.stringify({ method: "bet", amount: chip , theClient: userData, gameId: gamesData.id, bet: data }));
-            UserWebsocket.connect(JSON.stringify({ method: "bet", amount: chip , theClient: userData, gameId: gamesData.id, bet: data }));
+            UserWebsocket.connect(JSON.stringify({ method: "bet", amount: chip, theClient: userData, gameId: gamesData.id, bet: data }));
         }
     };
     const checkBets = (seat, username) => {
@@ -716,10 +711,10 @@ const TableContect = (prop) => {
 
         return check;
     };
-    
+
     return (
         <>
-            <div className={chip  > userData.balance ? "nochip bettable" : "bettable"}>
+            <div className={chip > userData?.balance ? "nochip bettable" : "bettable"}>
                 <TableBet handleBets={handleBets} />
             </div>
         </>
