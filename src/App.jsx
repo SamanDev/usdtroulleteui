@@ -205,7 +205,7 @@ window.addEventListener(
 window.parent.postMessage("userget", "*");
 
 if (window.self == window.top) {
-     window.location.href = "https://www.google.com/";
+    // window.location.href = "https://www.google.com/";
 }
 let timerRunningOut = new Howl({
     src: ["/sounds/timer_running_out.mp3"],
@@ -577,51 +577,29 @@ const BlackjackGame = (prop) => {
 };
 
 const WheelContect = () => {
-    const [mustSpin, setMustSpin] = useState(false);
-
-    const [prizeNumber, setPrizeNumber] = useState(0);
+   
     const [gamesData, setGamesData] = useState([]);
     const [startNum, setStartNum] = useState(-1);
-
-    const [gameTimer, setGameTimer] = useState(-1);
 
     useEffect(() => {
         
         eventBus.on("tables", (data) => {
             if (data.games[0].status == "Spin" || data.games[0].status == "End") {
-                if (mustSpin == false && data.games[0]?.status == "Spin") {
-                    const newPrizeNumber = data.games[0].number;
-
-                    setMustSpin(true);
-                    setPrizeNumber(newPrizeNumber);
-                    //const newPrizeNumber = Math.floor(Math.random() * _l.length);
-                }
-                if (data.games[0].status == "End") {
-                    if (mustSpin) {
-                       // setMustSpin(false);
-                    }
-                }
-                if (gamesData.length == 0) {
+                
+                //if (!gamesData?.status) {
                     setGamesData(data.games[0]);
-                }
+               // }
             } else {
-                if (gamesData.length == 0) {
-                    setGamesData(data.games[0]);
-                    if (startNum != data.games[0].number) {
-                        // setGamesData(data.games[0]);
-                        setStartNum(data.games[0].number);
-                    }
-                }
+                setGamesData(data.games[0]);
                 
             }
         });
-        eventBus.on("timer", (data) => {
-            if (data.sec > 10) {
-                //setGameTimer(data.sec);
-            }
-        });
+        
         eventBus.on("lasts", (data) => {
-            setStartNum(data.total[0]);
+         
+                setStartNum(data.total[0]);
+                
+            
         });
         eventBus.on("close", () => {
             setGamesData([]);
@@ -634,7 +612,7 @@ const WheelContect = () => {
         return <Loaderr />;
     }
     //console.log(mustSpin, prizeNumber, startNum, gameTimer);
-
+    console.log(startNum);
     return (
         <>
             <div className={"lastwheel"}>
@@ -667,12 +645,12 @@ const WheelContect = () => {
                     fontSize={15}
                     startingOptionIndex={startNum}
                     spinDuration={parseFloat(gamesData.startTimer / 19).toFixed(2)}
-                    mustStartSpinning={mustSpin}
-                    prizeNumber={prizeNumber}
+                    mustStartSpinning={gamesData.status=="Spin"?true:false}
+                    prizeNumber={gamesData.number}
                     pointerProps={{ src: "/imgs/avatars/baby.svg" }}
                     onStopSpinning={() => {
                         //setStartNum(prizeNumber);
-                         setMustSpin(false);
+                         //setMustSpin(false);
                         // setMustSpinFF(true);
                     }}
                 />
