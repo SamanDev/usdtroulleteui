@@ -305,6 +305,7 @@ const BlackjackGame = (prop) => {
         }
     }, [last]);
     useEffect(() => {
+        timerRunningOut.stop();
         if (gameData?.status == "End") {
             for (const [key, value] of Object.entries(allBets)) {
                 if (value.includes("" + segments[gameData.number] + "") || value.includes(segments[gameData.number])) {
@@ -540,7 +541,7 @@ const BlackjackGame = (prop) => {
                         })}
                     </div>
                 )}
-                {gameData.players.length > 0 && (
+                {listBets.length > 0 && (
                     <div className="dealer-cards" id="betslist" style={{ marginTop: 1000, color: "#fff", height: 300, overflow: "auto" }}>
                         <div>
                             {listBets.map(function (x, i) {
