@@ -622,7 +622,8 @@ const WheelContect = () => {
 
     }, []);
 
-    if (startNum == -1) {
+    if (startNum == -1 || !gamesData?.status ) {
+        
         return <Loaderr />;
     }
     //console.log(mustSpin, prizeNumber, startNum, gameTimer);
