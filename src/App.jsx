@@ -376,6 +376,7 @@ const BlackjackGame = (prop) => {
             } else {
                 setListBets(gameData?.players.sort((a, b) => (a.amount > b.amount ? -1 : 1)));
             }
+            if ($(".roulette-table-container")) {
             gameData.players.map(function (x, i) {
                 if (x.nickname != userData?.nickname) {
                     let modecls = "org";
@@ -430,6 +431,7 @@ const BlackjackGame = (prop) => {
                     }
                 }
             });
+        }
         }
     }, [gameData]);
 
@@ -602,10 +604,14 @@ const WheelContect = () => {
                     setGamesData(data.games[0]);
                 }
             } else {
-                if (startNum != data.games[0].number) {
-                    // setGamesData(data.games[0]);
-                    setStartNum(data.games[0].number);
+                if (gamesData.length == 0) {
+                    setGamesData(data.games[0]);
+                    if (startNum != data.games[0].number) {
+                        // setGamesData(data.games[0]);
+                        setStartNum(data.games[0].number);
+                    }
                 }
+                
             }
         });
         eventBus.on("timer", (data) => {
