@@ -708,7 +708,7 @@ const TableContect = (prop) => {
 
     }, []);
 
-    if (!gamesData?.status) {
+    if (!gamesData?.status || !userData?.nickname) {
         return <Loaderr />;
     }
     const handleBets = (data) => {
