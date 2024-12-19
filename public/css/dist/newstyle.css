@@ -1,0 +1,18 @@
+@import url('./style.css');
+
+* {
+  -webkit-font-smoothing: subpixel-antialiased !important;
+  backface-visibility: hidden !important; 
+
+
+
+}
+.balance-bet {
+   
+    width: 180px;
+    
+    font-size: 20px;
+    line-height: 28px;
+    color: #fff;
+    text-align: center;
+}

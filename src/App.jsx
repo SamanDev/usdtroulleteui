@@ -107,11 +107,11 @@ function checkbox() {
 setInterval(() => {
     checkbox();
 }, 500);
-let _l = [];
+var _l = [];
 
 segments.map((item, i) => {
     _l.push({
-        option: item,
+        option: item.toString(),
         style: {
             backgroundColor: getcolor(item),
             textColor: getcolortext(item),
@@ -371,8 +371,6 @@ const BlackjackGame = (prop) => {
 
     useEffect(() => {
         if (gameData?.players) {
-            
-            
             if ($(".roulette-table-container:visible").length > 0) {
                 if (gameData?.status == "End") {
                     setListBets(gameData?.players.sort((a, b) => (a.win > b.win ? -1 : 1)));
@@ -579,42 +577,63 @@ const BlackjackGame = (prop) => {
 };
 
 const WheelContect = () => {
-    const [gamesData, setGamesData] = useState({"id":"Roulette01","status":"Done","players":[],"number":29,"total":0,"net":0,"gameOn":true,"gameStart":true,"currentPlayer":10,"min":1,"startTimer":13});
+    const [timer, setTimer] = useState(15);
     const [startNum, setStartNum] = useState(-1);
+    const [mustSpin, setMustSpin] = useState(false);
+    const [prizeNumber, setPrizeNumber] = useState(-1);
 
     useEffect(() => {
         eventBus.on("tables", (data) => {
-            if (data.games[0].status == "Spin") {
-                //if (!gamesData?.status) {
-                setTimeout(() => {
-                    setGamesData(data.games[0]);
-                }, 100);
-                
-                // }
-            } else {
-                setGamesData(data.games[0]);
-            }
+            handleSpinClick(data.games[0]);
         });
-
         eventBus.on("lasts", (data) => {
             setStartNum(data.total[0]);
         });
         eventBus.on("close", () => {
-            //setGamesData([]);
+            setStartNum(-1);
         });
+        return () => {
+            console.log("remove");
+
+            eventBus.remove("tables");
+            eventBus.remove("lasts");
+            eventBus.remove("close");
+        };
     }, []);
 
-    if (startNum == -1 || !gamesData?.status) {
+    //console.log(mustSpin, prizeNumber, startNum, gameTimer);
+    const handleSpinClick = (gamesData) => {
+        setTimer(0);
+        if (gamesData?.status == "Spin") {
+            
+               // console.log(gamesData);
+                // setStartNum(gamesData.number);
+                if (!mustSpin) {
+                    
+
+                    setPrizeNumber(gamesData.number);
+setTimeout(() => {
+    setTimer(gamesData.startTimer);
+    setMustSpin(true);
+}, 500);
+                    
+                }
+            
+        }else{
+            setPrizeNumber(gamesData.number);
+        }
+    };
+    if (startNum == -1||prizeNumber==-1) {
         return <Loaderr />;
     }
-    //console.log(mustSpin, prizeNumber, startNum, gameTimer);
    
+
     return (
         <>
-            <div className={"lastwheel"}>
+            <div className={"lastwheel "+ startNum}>
                 <div className="shadow"></div>
                 <div className="countover">
-                    {gamesData.status == "Spin" ? (
+                    {mustSpin ? (
                         <>
                             <img src="/imgs/cadr2.png" id="cadr" />
                             <img src="/imgs/cadr4.png" id="cadr2" />
@@ -629,6 +648,8 @@ const WheelContect = () => {
                 </div>
                 <Wheel
                     data={_l}
+                    mustStartSpinning={mustSpin}
+                    prizeNumber={prizeNumber}
                     outerBorderWidth={0}
                     outerBorderColor={"#eeeeee"}
                     innerRadius={10}
@@ -640,14 +661,14 @@ const WheelContect = () => {
                     perpendicularText={true}
                     fontSize={15}
                     startingOptionIndex={startNum}
-                    spinDuration={parseFloat(gamesData.startTimer / 19).toFixed(2)}
-                    mustStartSpinning={gamesData.status == "Spin" ? true : false}
-                    prizeNumber={gamesData.number}
+                    spinDuration={parseFloat(timer / 20).toFixed(1)}
                     pointerProps={{ src: "/imgs/avatars/baby.svg" }}
                     onStopSpinning={() => {
-                        //setStartNum(prizeNumber);
-                        //setMustSpin(false);
-                        // setMustSpinFF(true);
+                        setStartNum(prizeNumber);
+                        setTimeout(() => {
+
+                            setMustSpin(false);
+                        }, 1000);
                     }}
                 />
             </div>
@@ -661,10 +682,11 @@ const TableContect = (prop) => {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        setTimeout(() => {
-            UserWebsocket.connect(WEB_URL, _auth);
-        }, 100);
-
+        if (!userData?.nickname) {
+            setTimeout(() => {
+                UserWebsocket.connect(WEB_URL, _auth);
+            }, 1000);
+        }
         eventBus.on("tables", (data) => {
             setGamesData(data.games[0]);
             if (gameTimer == -1) {
@@ -685,8 +707,16 @@ const TableContect = (prop) => {
             }
         });
         eventBus.on("close", () => {
-            //setGamesData([]);
+            setGamesData(null);
         });
+        return () => {
+            console.log("remove");
+
+            eventBus.remove("tables");
+            eventBus.remove("connect");
+            eventBus.remove("close");
+            eventBus.remove("timer");
+        };
     }, []);
 
     if (!gamesData?.status || !userData?.nickname) {

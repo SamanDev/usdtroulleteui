@@ -1,14 +1,7 @@
-
 import eventBus from "./eventBus";
 
 var ws = null;
-var ws2;
-var res = false;
-var timeout = 35000;
 var timerId;
-var usr;
-var tkn = false;
-var count = 0;
 function isJson(str) {
     // alert("str00 = "+str)
     try {
@@ -22,18 +15,15 @@ function isJson(str) {
 }
 class UserWebsocket {
     connect(WEB_URL, _auth) {
-      
         if (ws == null && !isJson(WEB_URL)) {
             ws = new WebSocket(WEB_URL, _auth);
 
             ws.onopen = function live() {
-               
                 clearInterval(timerId);
                 timerId = setInterval(() => {
                     try {
                         const payLoad = {
                             method: "ping",
-                
                         };
                         try {
                             ws.send(JSON.stringify(payLoad));
@@ -48,36 +38,31 @@ class UserWebsocket {
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data); // Parse kardan JSON daryafti
                 //console.log("Game data received: ", data);
-             // console.log(data);
-              
-                    eventBus.dispatch(data.method, data);
-               
-                
-                
+                //console.log(data);
+
+                eventBus.dispatch(data.method, data);
             };
-            
+
             // Event onclose baraye vaghti ke websocket baste mishe
             ws.onclose = () => {
+                clearInterval(timerId);
+
                 eventBus.dispatch("close");
             };
-          
-            ws.onerror = function (e) {
+
+            ws.onerror = function () {
                 eventBus.dispatch("close");
             };
         } else {
-            if(isJson(WEB_URL)){
+            if (isJson(WEB_URL)) {
                 try {
                     ws.send(WEB_URL);
                 } catch (error) {}
             }
-           
         }
-       
+
         // Event onmessage baraye daryaft data az server
-       
     }
-  
-    
 }
 
 export default new UserWebsocket();
