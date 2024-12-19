@@ -189,7 +189,7 @@ const AppOrtion = () => {
 };
 
 let supportsOrientationChange = "onorientationchange" in window,
-    orientationEvent = supportsOrientationChange ? "onorientationchange" : "resize";
+    orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
 var sizeBln;
 window.addEventListener(
     orientationEvent,
@@ -205,7 +205,7 @@ window.addEventListener(
 window.parent.postMessage("userget", "*");
 
 if (window.self == window.top) {
-    // window.location.href = "https://www.google.com/";
+     window.location.href = "https://www.google.com/";
 }
 let timerRunningOut = new Howl({
     src: ["/sounds/timer_running_out.mp3"],
