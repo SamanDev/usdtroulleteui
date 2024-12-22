@@ -104,9 +104,7 @@ function checkbox() {
         $("#cadr").hide();
     }
 }
-setInterval(() => {
-    checkbox();
-}, 500);
+
 var _l = [];
 
 segments.map((item, i) => {
@@ -116,6 +114,13 @@ segments.map((item, i) => {
             backgroundColor: getcolor(item),
             textColor: getcolortext(item),
         },
+    });
+});
+let sectors = [];
+segments.map((item, i) => {
+    sectors.push({
+        label: item,
+        color: getcolor(item),
     });
 });
 function animateNum() {
@@ -205,7 +210,7 @@ window.addEventListener(
 window.parent.postMessage("userget", "*");
 
 if (window.self == window.top) {
-     window.location.href = "https://www.google.com/";
+    window.location.href = "https://www.google.com/";
 }
 let timerRunningOut = new Howl({
     src: ["/sounds/timer_running_out.mp3"],
@@ -226,7 +231,7 @@ const Main = () => {
         <div>
             <div className={"game-room"} id="scale">
                 <BlackjackGame setChip={setChip} chip={chip} />
-                <WheelContect />
+                <WheelContectNew />
 
                 <TableContect chip={chip} />
             </div>
@@ -390,18 +395,22 @@ const BlackjackGame = (prop) => {
                                 let cIcon = getChipIcon(x.amount);
                                 let cCount = $("[data-bet=" + x.betId.id + "]").find(".user").length + i;
                                 if (x.betId.payload.length == 1) {
-                                    $("[data-bet=" + x.betId.id + "] > div.value").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 30) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                    $("[data-bet=" + x.betId.id + "] > div.value").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.002 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 30) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
                                 } else {
-                                    $("[data-bet=" + x.betId.id + "] > div").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 30) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                    $("[data-bet=" + x.betId.id + "] > div").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.002 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 30) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
                                 }
                             }
                         } else {
-                            let blnIs = $("[data-highlight=" + x.betId.id + "]").find('[username="' + x.nickname + '"]').length;
+                            let blnIs = $("[data-highlight=" + x.betId.id + "]:first").find('[username="' + x.nickname + '"]').length;
                             if (blnIs == 0) {
                                 let cIcon = getChipIcon(x.amount);
-                                let cCount = $("[data-highlight=" + x.betId.id + "]").find(".user").length + i;
-
-                                $("[data-highlight=" + x.betId.id + "]").append('<div class="chip center user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCount - i) * 5 + 10) + "px," + (cCount - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                let cCountC = $("[data-highlight=" + x.betId.id + "]").find(".user").length + i;
+                                let cCount = x.betId.id.split('-');
+                                var cclass = "center"
+                                if(cCount.length==2 && (parseInt(cCount[0])+1!=parseInt(cCount[1]) && parseInt(cCount[0])-1!=parseInt(cCount[1]))){cclass = "right-center"}
+                                if(cCount.length==2 && parseInt(cCount[0]) == 0  && (cCount[1]) == "00" ){cclass = "center"}
+                                if(cCount.length==2 && parseInt(cCount[0]) == 0  && (cCount[1]) != "00" ){cclass = "right-center"}
+                                $("[data-highlight=" + x.betId.id + "]:first").append('<div class="chip '+cclass+' user animate__animated animate__zoomInDown ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;transform: scale(0.7) translate(-" + ((cCountC - i) * 5 + 10) + "px," + (cCountC - i) * 5 + "px);background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
                             }
                         }
                     } else {
@@ -416,18 +425,26 @@ const BlackjackGame = (prop) => {
                                 let cIcon = getChipIcon(x.amount);
                                 let cCount = $("[data-bet=" + x.betId.id + "]").find(".user").length + i;
                                 if (x.betId.payload.length == 1) {
-                                    $("[data-bet=" + x.betId.id + "] > div.value").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                    $("[data-bet=" + x.betId.id + "] > div.value").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.002 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
                                 } else {
-                                    $("[data-bet=" + x.betId.id + "] > div").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                    $("[data-bet=" + x.betId.id + "] > div").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.002 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
                                 }
                             }
                         } else {
-                            let blnIs = $("[data-highlight=" + x.betId.id + "]").find('[username="' + x.nickname + '"]').length;
+                            let blnIs = $("[data-highlight=" + x.betId.id + "]:first").find('[username="' + x.nickname + '"]').length;
                             if (blnIs == 0) {
                                 let cIcon = getChipIcon(x.amount);
-                                let cCount = $("[data-highlight=" + x.betId.id + "]").find(".user").length + i;
-
-                                $("[data-highlight=" + x.betId.id + "]").append('<div class="chip center animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.005 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
+                                let cCount = x.betId.id.split('-');
+                                var cclass = "center"
+                                if(cCount.length==2 && (parseInt(cCount[0])+1!=parseInt(cCount[1]) && parseInt(cCount[0])-1!=parseInt(cCount[1]))){cclass = "right-center"}
+                                if(cCount.length==2 && parseInt(cCount[0]) == 0  && (cCount[1]) == "00" ){cclass = "center"}
+                                if(cCount.length==2 && parseInt(cCount[0]) == 0  && (cCount[1]) != "00" ){cclass = "right-center"}
+    
+                               // if(cCount.length==3){cclass = "left-top"}
+                               // if(cCount.length==5){cclass = "right-top"}
+    
+    
+                                $("[data-highlight=" + x.betId.id + "]:first").append('<div class="chip '+cclass+' animate__animated animate__rotateIn ' + modecls + '" username="' + x.nickname + '" style="animation-delay: ' + i * (!last ? 0.002 : 0.001) + "s;background-image: url(&quot;/imgs/chips/Casino_Chip_" + cIcon + '.svg&quot;);"></div>');
                             }
                         }
                     }
@@ -575,7 +592,111 @@ const BlackjackGame = (prop) => {
         </>
     );
 };
+const WheelContectNew = () => {
+    const [gamesData, setGamesData] = useState([]);
+    const [startNum, setStartNum] = useState(-1);
 
+    const [gameTimer, setGameTimer] = useState(-1);
+    const initGame = (num, rot) => {
+        if (document.getElementsByTagName("canvas")[0]) {
+            const tot = 360 / sectors.length;
+            const ctx = document.querySelector("#wheel").getContext("2d");
+            if (!$("canvas").hasClass("drowed")) {
+                $("canvas").addClass("drowed");
+                var canvas = document.getElementsByTagName("canvas")[0];
+                canvas.width = 600;
+                canvas.height = 600;
+
+                const dia = ctx.canvas.width;
+                const rad = dia / 2;
+                const PI = Math.PI;
+                const TAU = 2 * PI;
+                const arc = TAU / sectors.length;
+
+                function drawSector(sector, i) {
+                    const ang = arc * i;
+                    ctx.save();
+                    // COLOR
+                    ctx.beginPath();
+                    ctx.fillStyle = sector.color;
+                    ctx.moveTo(rad, rad);
+                    ctx.arc(rad, rad, rad, ang, ang + arc);
+                    ctx.lineTo(rad, rad);
+                    ctx.fill();
+                    // TEXT
+                    ctx.translate(rad, rad);
+                    ctx.rotate(ang + arc / 2);
+                    ctx.textAlign = "right";
+                    ctx.fillStyle = "#fff";
+                    ctx.font = "bold 22px sans-serif";
+                    ctx.fillText(sector.label, rad - 50, 7);
+
+                    //
+                    ctx.restore();
+                }
+                sectors.forEach(drawSector);
+                rot = true;
+            }
+            const defnum = num;
+            function rotate() {
+                const mydeg = tot * 28 + Math.floor((Math.random() * tot) / 1.5);
+                //console.log(tot * 28, defnum);
+
+                ctx.canvas.style.transform = `rotate(${mydeg - defnum * tot}deg)`;
+            }
+            if (rot) rotate();
+        }
+    };
+    var lightMod;
+    useEffect(() => {
+        eventBus.on("tables", (data) => {
+            setGamesData(data.games[0]);
+            if (data.games[0].status == "Spin") {
+                lightMod = setInterval(() => {
+                    checkbox();
+                }, 1000);
+                $("#dospin").removeClass("frz").addClass("dospin");
+                $("canvas").removeClass("frz");
+
+                initGame(data.games[0].number, true);
+
+                //const newPrizeNumber = Math.floor(Math.random() * _l.length);
+            } else {
+                clearInterval(lightMod);
+                $("#dospin").addClass("frz").removeClass("dospin");
+                $("canvas").addClass("frz");
+                initGame(data.games[0].number);
+            }
+        });
+
+        eventBus.on("close", () => {
+            setGamesData([]);
+        });
+    }, []);
+
+    //console.log(mustSpin, prizeNumber, startNum, gameTimer);
+
+    return (
+        <>
+            <div className={"lastwheel"}>
+                <div>
+                    <div className="shadow"></div>
+                    <div className="countover">
+                        <img src="/imgs/cadr2.png" id="cadr" />
+                        <img src="/imgs/cadr4.png" id="cadr2" style={{ display: "none" }} />
+
+                        <img src="/imgs/cadr3.png" className="rotate" />
+                    </div>
+                    <div id="wheelOfFortune">
+                        <div id="dospin" className="" style={{ transitionDuration: 12 + "s" }}>
+                            <canvas id="wheel" width="600" height="600" style={{ transitionDuration: 6 + "s" }}></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+};
 const WheelContect = () => {
     const [timer, setTimer] = useState(15);
     const [startNum, setStartNum] = useState(-1);
@@ -605,32 +726,26 @@ const WheelContect = () => {
     const handleSpinClick = (gamesData) => {
         setTimer(0);
         if (gamesData?.status == "Spin") {
-            
-               // console.log(gamesData);
-                // setStartNum(gamesData.number);
-                if (!mustSpin) {
-                    
-
-                    setPrizeNumber(gamesData.number);
-setTimeout(() => {
-    setTimer(gamesData.startTimer);
-    setMustSpin(true);
-}, 500);
-                    
-                }
-            
-        }else{
+            // console.log(gamesData);
+            // setStartNum(gamesData.number);
+            if (!mustSpin) {
+                setPrizeNumber(gamesData.number);
+                setTimeout(() => {
+                    setTimer(gamesData.startTimer);
+                    setMustSpin(true);
+                }, 500);
+            }
+        } else {
             setPrizeNumber(gamesData.number);
         }
     };
-    if (startNum == -1||prizeNumber==-1) {
+    if (startNum == -1 || prizeNumber == -1) {
         return <Loaderr />;
     }
-   
 
     return (
         <>
-            <div className={"lastwheel "+ startNum}>
+            <div className={"lastwheel " + startNum}>
                 <div className="shadow"></div>
                 <div className="countover">
                     {mustSpin ? (
@@ -666,7 +781,6 @@ setTimeout(() => {
                     onStopSpinning={() => {
                         setStartNum(prizeNumber);
                         setTimeout(() => {
-
                             setMustSpin(false);
                         }, 1000);
                     }}
