@@ -29,7 +29,7 @@ _renge.push(_renge[0] * 100);
 
 _renge.push(_renge[0] * 250);
 //const WEB_URL = process.env.REACT_APP_MODE === "production" ? `wss://${process.env.REACT_APP_DOMAIN_NAME}/` : `ws://${loc.hostname}:8088`;
-const WEB_URL = `wss://mroullete.royale777.vip/`;
+const WEB_URL = `wss://mroullete.usdtpoker.club/`;
 //const WEB_URL = `ws://${loc.hostname}:8092/`;
 // (A) LOCK SCREEN ORIENTATION
 
@@ -210,7 +210,7 @@ window.addEventListener(
 window.parent.postMessage("userget", "*");
 
 if (window.self == window.top) {
-    window.location.href = "https://www.google.com/";
+    //window.location.href = "https://www.google.com/";
 }
 let timerRunningOut = new Howl({
     src: ["/sounds/timer_running_out.mp3"],
